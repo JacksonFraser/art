@@ -1,5 +1,15 @@
+# This is a GitHub Actions workflow named "Java CI". It is triggered whenever a push to the master branch
+# or any pull request to any branch is made.
 name: Java CI
-on: [push, pull_request]
+on:
+  # Defines when the action should run, in this case, on a push to the master branch.
+  push:
+    branches:
+      - master
+  # Additionally, this action should also run on any pull request made to any branch.
+  pull_request:
+    branches:
+      - '*'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,14 +31,29 @@ jobs:
       - name: Docker login
         uses: docker/login-action@v1
         with:
-          registry: ${{ secrets.DOCKER_REGISTRY_URL }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+      # Extract the branch name from the GITHUB_REF environment variable,
+      # replace all '/' characters with '-', and save it as BRANCH_NAME.
+      - name: Extract branch name
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//-/g')" >> $GITHUB_ENV
       - name: Build And Push Docker Image
         env:
           DOCKER_REPOSITORY_PATH: ${{ secrets.DOCKER_REPOSITORY_PATH }}
-          DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
           TESTCONTAINERS_RYUK_DISABLED: true
         run: |
-          export DOCKER_IMAGE=`echo "${DOCKER_REGISTRY_URL}/${DOCKER_REPOSITORY_PATH}/art" | sed -e 's#//#/#' -e 's#^/##'`
-          ./gradlew check dockerPush --no-daemon
+          # Define the Docker image and tag,
+          # taking into account whether the event is a pull request or a push to a branch.
+          export DOCKER_IMAGE=`echo "${DOCKER_REPOSITORY_PATH}/art" | sed -e 's#//#/#' -e 's#^/##'`
+          export DOCKER_TAG="${BRANCH_NAME}-$(echo "${GITHUB_SHA}" | cut -c 1-5)"
+          if [ "${{ github.event_name }}" == "pull_request" ]
+          then
+            DOCKER_TAG="PR-${{ github.event.pull_request.number }}"
+          elif [ "${BRANCH_NAME}" != "master" ]
+          then
+            DOCKER_TAG="${BRANCH_NAME}-${GITHUB_SHA} | cut -c 1-5)"
+          fi
+          # Execute the Gradle check and dockerPush tasks to build and push the Docker image.
+          # The Docker tag is passed as a parameter to the dockerPush task.
+          ./gradlew check dockerPush --no-daemon -PdockerTag=${DOCKER_TAG}

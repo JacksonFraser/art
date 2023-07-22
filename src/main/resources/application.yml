@@ -13,8 +13,10 @@ micronaut:
     authentication: cookie
 datasources:
   default:
+    url: jdbc:postgresql://localhost:5432/planningpoker
     driverClassName: org.postgresql.Driver
-    db-type: postgresql
+    username: postgres
+    password: postgres
     schema-generate: CREATE_DROP
     dialect: POSTGRES
 netty:
@@ -22,3 +24,8 @@ netty:
     allocator:
       max-order: 3
 jpa.default.properties.hibernate.hbm2ddl.auto: none
+
+liquibase:
+  datasources:
+    default:
+      change-log: 'classpath:db/db.changelog-master.xml'

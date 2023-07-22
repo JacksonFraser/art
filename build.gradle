@@ -1,5 +1,5 @@
 plugins {
-    id("groovy") 
+    id("groovy")
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.6.2"
     id("io.micronaut.test-resources") version "3.6.2"
@@ -48,11 +48,11 @@ java {
 
 tasks {
     dockerBuild {
-        images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+        images = ["${System.env.DOCKER_IMAGE ?: project.name}:${project.findProperty('dockerTag') ?: project.version}"]
     }
 
     dockerBuildNative {
-        images = ["${System.env.DOCKER_IMAGE ?: project.name}:$project.version"]
+        images = ["${System.env.DOCKER_IMAGE ?: project.name}:${project.findProperty('dockerTag') ?: project.version}"]
     }
 }
 graalvmNative.toolchainDetection = false

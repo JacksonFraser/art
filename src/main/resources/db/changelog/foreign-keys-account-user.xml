@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <changeSet id="fk-1" author="jackson.fraser">
+        <addForeignKeyConstraint constraintName="fk_account_user_id"
+                                 baseTableName="account" baseColumnNames="user_id"
+                                 referencedTableName="user" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="fk-2" author="jackson.fraser">
+        <addForeignKeyConstraint constraintName="fk_user_account_id"
+                                 baseTableName="user" baseColumnNames="account_id"
+                                 referencedTableName="account" referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>

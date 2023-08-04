@@ -17,6 +17,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @NotNull
@@ -27,6 +28,7 @@ public class Account {
     @Column(name = "accountType")
     private String accountType;
 
+    @NotNull
     @OneToOne(mappedBy = "account")
-    private User users;
+    private User user;
 }

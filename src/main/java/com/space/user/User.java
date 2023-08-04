@@ -6,8 +6,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Getter
 @Setter
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -20,8 +20,8 @@ public class User {
     private Long id;
 
     @NotNull
-    @OneToOne
-    @JoinColumn(name = "account_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id",  referencedColumnName = "id", nullable = false)
     private Account account;
 
     @NotNull

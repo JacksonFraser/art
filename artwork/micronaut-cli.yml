@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.art
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, data, data-mongodb-reactive, gradle, http-client, java, java-application, junit, localstack, logback, micronaut-aot, micronaut-build, netty-server, openapi, properties, readme, serialization-jackson, shade, testcontainers]

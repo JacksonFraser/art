@@ -1,0 +1,30 @@
+micronaut:
+  application:
+    name: art
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+  security:
+    authentication: cookie
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/user
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    dialect: POSTGRES
+netty:
+  default:
+    allocator:
+      max-order: 3
+jpa.default.properties.hibernate.hbm2ddl.auto: none
+
+liquibase:
+  datasources:
+    default:
+      change-log: 'classpath:db/db.changelog-master.xml'
